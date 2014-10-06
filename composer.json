@@ -1,0 +1,23 @@
+{
+    "name": "urielon/laravel-vimeo",
+    "description": "",
+    "authors": [
+        {
+            "name": "Uriel Acosta Hernández",
+            "email": "uriel2707@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "4.2.*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
+        "psr-0": {
+            "Urielon\\LaravelVimeo\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
