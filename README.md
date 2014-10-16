@@ -22,3 +22,15 @@ If you want to use the facade, add this to your facades in app/config/app.php
     'Vimeo' => 'Urielon\LaravelVimeo\Facades\Vimeo',
 
 ## Examples
+### Upload Video
+
+    
+    $file = Input::file('video');
+
+    $uri = Vimeo::upload($file->getRealPath());
+
+    $video_data = Vimeo::request($uri);
+    
+    $data = array();
+
+    $data['video_body'] = $video_data['body'];
