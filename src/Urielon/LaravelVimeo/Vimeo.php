@@ -1,7 +1,8 @@
 <?php
 namespace Urielon\LaravelVimeo;
 
-//use Illuminate\Config\Repository;
+
+use Urielon\LaravelVimeo\VimeoUploadException as vimeoUploadException;
 /**
  *   Copyright 2013 Vimeo
  *
@@ -34,6 +35,7 @@ class Vimeo
     private $_client_id = null;
     private $_client_secret = null;
     private $_access_token = null;
+    
 
     /**
      * Creates the Vimeo library, and tracks the client and token information
@@ -277,7 +279,8 @@ class Vimeo
     public function upload ($file_path, $machine_id = null) {
         //  Validate that our file is real.
         if (!is_file($file_path)) {
-            throw new VimeoUploadException('Unable to locate file to upload.');
+            
+            throw new vimeoUploadException('Unable to locate file to upload.');
         }
 
         //  Begin the upload request by getting a ticket
@@ -287,7 +290,8 @@ class Vimeo
         }
         $ticket = $this->request('/me/videos', $ticket_args, 'POST');
         if ($ticket['status'] != 201) {
-            throw new VimeoUploadException('Unable to get an upload ticket.');
+            
+            throw new vimeoUploadException('Unable to get an upload ticket.');
         }
 
         //  We are going to always target the secure upload URL.
@@ -334,7 +338,8 @@ class Vimeo
         //  Validate that we got back 201 Created
         $status = (int) $completion['status'];
         if ($status != 201) {
-            throw new VimeoUploadException('Error completing the upload.');
+            
+            throw new vimeoUploadException('Error completing the upload.');
         }
 
         //  Furnish the location for the new clip in the API via the Location header.
@@ -351,12 +356,14 @@ class Vimeo
     public function uploadImage ($pictures_uri, $file_path) {
         //  Validate that our file is real.
         if (!is_file($file_path)) {
-            throw new VimeoUploadException('Unable to locate file to upload.');
+            
+            throw new vimeoUploadException('Unable to locate file to upload.');
         }
 
         $pictures_response = $this->request($pictures_uri, array(), 'POST');
         if ($pictures_response['status'] != 201) {
-            throw new VimeoUploadException('Unable to request an upload url from vimeo');
+            
+            throw new vimeoUploadException('Unable to request an upload url from vimeo');
         }
 
         $upload_url = $pictures_response['body']['link'];
@@ -378,20 +385,16 @@ class Vimeo
         $curl_info = curl_getinfo($curl);
 
         if (!$response) {
-            $error = curl_error($curl);
-            throw new VimeoUploadException($error);
+            $error = curl_error($curl);           
+            throw new vimeoUploadException($error);
         }
         curl_close($curl);
 
         if ($curl_info['http_code'] != 200) {
-            throw new VimeoUploadException($response);
+            
+            throw new vimeoUploadException($response);
         }
         
         return $pictures_response['body']['uri'];
     }
 }
-
-/**
- * VimeoUploadException class for failure to upload to the server.
- */
-//class VimeoUploadException extends Exception {}
