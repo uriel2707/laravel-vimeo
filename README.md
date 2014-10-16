@@ -34,3 +34,8 @@ If you want to use the facade, add this to your facades in app/config/app.php
     $data = array();
 
     $data['video_body'] = $video_data['body'];
+    
+   
+### Api Vimeo 
+    
+    $response = Vimeo::request($video->uri . '/pictures');
